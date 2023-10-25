@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="blog-admin" />
+        <module name="blog-common" />
         <module name="blog-front" />
       </profile>
     </annotationProcessing>
@@ -15,6 +16,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Blog" options="" />
       <module name="blog-admin" options="-parameters" />
+      <module name="blog-common" options="-parameters" />
       <module name="blog-front" options="-parameters" />
     </option>
   </component>
