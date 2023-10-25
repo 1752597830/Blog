@@ -3,7 +3,6 @@ package com.qf.service.impl;
 import com.qf.domain.User;
 import com.qf.mapper.UserMapper;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1、自定义数据库判断信息
         User user = userMapper.getByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("账户不存在！");
+        }
 
         // 2、将数据库中的角色拆分成SpringSecurity结构
         String roles = user.getRoles().stream().map(Role::getTag).collect(Collectors.joining(","));

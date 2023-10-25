@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qf.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.qf.domain.Menu">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="deleteStatus" jdbcType="INTEGER" property="deleteStatus" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="component" jdbcType="VARCHAR" property="component" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="showLink" jdbcType="BIT" property="showLink" />
+        <result column="rank" jdbcType="INTEGER" property="rank" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+
+        <association property="parent" column="parent_id" javaType="com.qf.domain.Menu" select="com.redpig.mapper.MenuMapper.selectByParentId" />
+
+        <collection property="perms" column="id" ofType="com.qf.domain.Perm" select="com.redpig.mapper.PermMapper.getSelectedPermsByMenuId" />
+
+        <collection property="roles" column="id" ofType="com.qf.domain.Role" select="com.redpig.mapper.RoleMapper.getSelectedRolesByMenuId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        m.id,m.deleteStatus,m.createTime,m.updateTime,m.name,m.path,m.component,m.title,m.type,m.icon,m.showLink,m.rank,m.parent_id
+    </sql>
+
+    <select id="listMenu" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from redpig_sys_menu m ${ew.customSqlSegment}
+    </select>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from redpig_sys_menu m ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from redpig_sys_menu m where m.deleteStatus=1 and m.id = #{pid,jdbcType=BIGINT}
+    </select>
+
+</mapper>

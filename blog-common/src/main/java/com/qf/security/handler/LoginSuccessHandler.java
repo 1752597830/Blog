@@ -1,6 +1,5 @@
 package com.qf.security.handler;
 
-import com.alibaba.fastjson2.util.DateUtils;
 import com.qf.domain.ResponseResult;
 import com.qf.domain.User;
 import com.qf.utils.JwtUtil;
@@ -37,11 +36,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         data.put("roles",user.getRoles().stream().map(Role::getTag).collect(Collectors.toList()));
         data.put("accessToken",token);
         data.put("refreshToken",token);
-        //data.put("expires", DateUtils.format(DateUtils.addDay(30)));
 
         log.info("登录成功 {}",user.getUsername());
 
-        response.getWriter().write(ResponseResult.errorJSON(data));
+        response.getWriter().write(ResponseResult.successJSON(data));
     }
 
 }

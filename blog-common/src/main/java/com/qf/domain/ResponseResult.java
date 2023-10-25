@@ -1,5 +1,7 @@
 package com.qf.domain;
 
+import com.alibaba.fastjson2.JSON;
+import com.qf.common.ResultCode;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -13,7 +15,7 @@ import lombok.experimental.Accessors;
 // 设置链式数据
 @ToString
 @Accessors(chain = true)
-public class ResponseResult<T> {
+public class ResponseResult <T> {
 
     /**
      * 状态码
@@ -37,7 +39,7 @@ public class ResponseResult<T> {
      * @param <T>
      */
     public static <T> ResponseResult success(T data) {
-        return new ResponseResult().setCode(200).setMessage("操作成功").setData(data);
+        return new ResponseResult().setCode(ResultCode.SUCCESS.getCode()).setMessage(ResultCode.SUCCESS.getMsg()).setData(data);
     }
 
     /**
@@ -46,11 +48,21 @@ public class ResponseResult<T> {
      * @return
      * @param <T>
      */
-    public static <T> ResponseResult fail(String message, T data) {
-        return new ResponseResult().setCode(400).setMessage(message).setData(data);
+    public static <T> ResponseResult error(T data) {
+        return new ResponseResult().setCode(ResultCode.ERROR.getCode()).setMessage(ResultCode.ERROR.getMsg()).setData(data);
     }
 
-    public static String errorJSON(Object result) {
-        return "错误: " + result;
+    public static String errorJSON(String result) {
+        return JSON.toJSONString(result);
     }
+
+    public static <T> String successJSON(T data) {
+        return JSON.toJSONString(success(data));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(JSON.toJSONString("错误"));
+        System.out.println(errorJSON("错误"));
+    }
+
 }

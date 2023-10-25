@@ -1,6 +1,6 @@
 package com.qf.filter;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSON;
 import com.qf.common.Constant;
 import com.qf.domain.ResponseResult;
 import com.qf.utils.JwtUtil;
@@ -42,7 +42,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }catch (Exception e){
                 response.setStatus(200);
                 response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write(JSONUtil.toJsonStr(ResponseResult.errorJSON("非法token")));
+                response.getWriter().write(new ResponseResult().setCode(400).setData(null).setMessage("非法token").toString());
                 return;
             }
         }

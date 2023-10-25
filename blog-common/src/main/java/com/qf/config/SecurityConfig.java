@@ -2,11 +2,13 @@ package com.qf.config;
 
 import com.qf.common.Constant;
 import com.qf.filter.JwtAuthenticationTokenFilter;
+import com.qf.security.auth.MyAuthorizationManager;
 import com.qf.security.filter.LoginAuthenticationFilter;
 import com.qf.security.handler.LoginFailureHandler;
 import com.qf.security.handler.LoginSuccessHandler;
 import com.qf.security.handler.NoAuthAccessDeniedHandler;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -37,6 +39,9 @@ public class SecurityConfig {
     @Resource
     private AuthenticationConfiguration authenticationConfiguration;
 
+    @Autowired
+    private MyAuthorizationManager authorizationManager;
+
     /**
      * token拦截器
      */
@@ -47,7 +52,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(e->e.requestMatchers(Constant.annos).permitAll());
         http.authorizeHttpRequests(e->e.requestMatchers(RegexRequestMatcher.regexMatcher("^\\S*[css|js]$")).permitAll());
-        //http.authorizeHttpRequests(e->e.anyRequest().access(authorizationManager));
+        http.authorizeHttpRequests(e->e.anyRequest().access(authorizationManager));
 
         //将JWT拦截器添加到UsernamePasswordAuthenticationFilter之前
         //登录之前验证token 从token中获取到登录凭证
