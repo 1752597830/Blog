@@ -42,7 +42,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }catch (Exception e){
                 response.setStatus(200);
                 response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write(new ResponseResult().setCode(400).setData(null).setMessage("非法token").toString());
+                response.getWriter().write(JSON.toJSONString(new ResponseResult().setCode(400).setData(null).setMessage("非法token")));
                 return;
             }
         }

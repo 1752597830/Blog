@@ -1,14 +1,14 @@
 package com.qf.service.impl;
 
-import com.qf.domain.User;
-import com.qf.mapper.UserMapper;
+import com.qf.domain.QfRole;
+import com.qf.domain.QfUser;
+import com.qf.mapper.QfUserMapper;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.qf.domain.Role;
 import java.util.stream.Collectors;
 
 /**
@@ -20,17 +20,17 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private UserMapper userMapper;
+    private QfUserMapper qfUserMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1、自定义数据库判断信息
-        User user = userMapper.getByUsername(username);
+        QfUser user = qfUserMapper.getByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("账户不存在！");
         }
 
         // 2、将数据库中的角色拆分成SpringSecurity结构
-        String roles = user.getRoles().stream().map(Role::getTag).collect(Collectors.joining(","));
+        String roles = user.getRoles().stream().map(QfRole::getTag).collect(Collectors.joining(","));
         // 3、封装UserDetails返回
         user.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
 

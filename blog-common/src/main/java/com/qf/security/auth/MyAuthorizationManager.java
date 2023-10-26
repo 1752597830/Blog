@@ -2,12 +2,11 @@ package com.qf.security.auth;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qf.common.Constant;
-import com.qf.domain.Menu;
-import com.qf.domain.User;
-import com.qf.domain.Perm;
-import com.qf.mapper.MenuMapper;
-import com.qf.mapper.UserMapper;
+import com.qf.domain.*;
+import com.qf.mapper.QfMenuMapper;
+import com.qf.mapper.QfUserMapper;
 import com.qf.utils.qfTools;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -16,9 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * @author : sin
@@ -29,26 +28,23 @@ import java.util.stream.Collectors;
 @Component
 public class MyAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
-    @Autowired
-    MenuMapper menuMapper;
+    @Resource
+    QfMenuMapper menuMapper;
 
-    @Autowired
-    UserMapper userMapper;
+    @Resource
+    QfUserMapper userMapper;
     @Override
     public void verify(Supplier<Authentication> authentication, RequestAuthorizationContext requestAuthorizationContext) {
         AuthorizationManager.super.verify(authentication, requestAuthorizationContext);
     }
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext requestAuthorizationContext) {
-        if(!(authentication.get().getPrincipal() instanceof User)){
+        if(!(authentication.get().getPrincipal() instanceof QfUser)){
             throw new AccessDeniedException("匿名不可访问!");
         }
-        User user = (User) authentication.get().getPrincipal();
+        QfUser user = (QfUser) authentication.get().getPrincipal();
 
         user = userMapper.getByUsername(user.getUsername());
-
-        //当前登录人的权限
-        List<String> auths = user.getPerms().stream().map(Perm::getTag).collect(Collectors.toList());
 
         //访问的接口地址
         String requestURI = requestAuthorizationContext.getRequest().getRequestURI();
@@ -57,22 +53,27 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         if(qfTools.contains(requestURI, Constant.annos)){
             return new AuthorizationDecision(true);
         }
-
         //查询当前请求的接口需要哪些权限能访问
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("m.type",2);
+        QueryWrapper<QfMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("m.path",requestURI);
-        List<Menu> menus = menuMapper.listMenu(queryWrapper);
+        List<QfMenu> menusByRoleIdList = new ArrayList<>();
+        user.getRoles();
+        for (QfRole role: user.getRoles()) {
+            // 用roleid获取menuid
+            QfMenu menu = menuMapper.selectByroleId(role.getId());
+            menusByRoleIdList.add(menu);
+        }
+        // 用路径来获取菜单
+        List<QfMenu> menus = menuMapper.listMenu(queryWrapper);
         System.out.println(menus);
-        for (String auth : auths) {
-            for (Menu menu : menus) {
-                List<String> menuPerms = menu.getPerms().stream().map(Perm::getTag).collect(Collectors.toList());
-                if(menuPerms.contains(auth)){
+        // 遍历菜单判断权限
+        for (QfMenu menu : menus) {
+            for (QfMenu qfMenu : menusByRoleIdList) {
+                if(menu.getId().equals(qfMenu.getId())) {
                     return new AuthorizationDecision(true);
                 }
             }
         }
-
         throw new AccessDeniedException(user.getUsername()+",没有访问:"+requestURI+"的权限");
     }
 }

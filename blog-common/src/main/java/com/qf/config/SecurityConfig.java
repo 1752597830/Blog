@@ -69,9 +69,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //@Bean
+    //public PasswordEncoder passwordEncoder() {
+    //
+    //    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    //}
+    /**
+     * 强散列哈希加密实现
+     */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     public LoginAuthenticationFilter loginAuthenticationFilter() throws Exception {

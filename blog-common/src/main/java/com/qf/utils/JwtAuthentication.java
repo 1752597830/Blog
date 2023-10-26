@@ -1,7 +1,6 @@
 package com.qf.utils;
 
-
-import com.qf.domain.User;
+import com.qf.domain.QfUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,7 +17,7 @@ public class JwtAuthentication implements Authentication {
     private Collection<SimpleGrantedAuthority> authorities;
     private Object details;
     private boolean authenticated;
-    private User principal;
+    private QfUser principal;
     private Object credentials;
 
     @Override
@@ -50,11 +49,11 @@ public class JwtAuthentication implements Authentication {
     }
 
     @Override
-    public User getPrincipal() {
+    public QfUser getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal(User principal) {
+    public void setPrincipal(QfUser principal) {
         this.principal = principal;
     }
 

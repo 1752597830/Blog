@@ -1,14 +1,14 @@
 package com.qf.security.handler;
 
+import com.qf.domain.QfUser;
+import com.qf.domain.QfRole;
 import com.qf.domain.ResponseResult;
-import com.qf.domain.User;
 import com.qf.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import com.qf.domain.Role;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication auth) throws IOException {
 
-        User user = (User) auth.getPrincipal();
+        QfUser user = (QfUser) auth.getPrincipal();
         //
         String token = JwtUtil.token(auth);
         //response.addHeader("token", token);
@@ -33,7 +33,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType("application/json;charset=UTF-8");
         Map<String, Object> data = new HashMap<>();
         data.put("username",user.getUsername());
-        data.put("roles",user.getRoles().stream().map(Role::getTag).collect(Collectors.toList()));
+        data.put("roles",user.getRoles().stream().map(QfRole::getTag).collect(Collectors.toList()));
         data.put("accessToken",token);
         data.put("refreshToken",token);
 
