@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 1、自定义数据库判断信息
         QfUser user = qfUserMapper.getByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("账户不存在！");
+            throw new RuntimeException("账户不存在！");
         }
 
         // 2、将数据库中的角色拆分成SpringSecurity结构

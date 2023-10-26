@@ -1,5 +1,6 @@
 package com.qf.security.auth;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qf.common.Constant;
 import com.qf.domain.*;
@@ -56,21 +57,21 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         //查询当前请求的接口需要哪些权限能访问
         QueryWrapper<QfMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("m.path",requestURI);
-        List<QfMenu> menusByRoleIdList = new ArrayList<>();
-        user.getRoles();
+        List<List<QfMenu>> menusByRoleIdList = new ArrayList<>();
         for (QfRole role: user.getRoles()) {
             // 用roleid获取menuid
-            QfMenu menu = menuMapper.selectByroleId(role.getId());
+            List<QfMenu> menu = menuMapper.selectByroleId(role.getId());
             menusByRoleIdList.add(menu);
         }
         // 用路径来获取菜单
         List<QfMenu> menus = menuMapper.listMenu(queryWrapper);
-        System.out.println(menus);
         // 遍历菜单判断权限
         for (QfMenu menu : menus) {
-            for (QfMenu qfMenu : menusByRoleIdList) {
-                if(menu.getId().equals(qfMenu.getId())) {
-                    return new AuthorizationDecision(true);
+            for (List<QfMenu> qfMenu : menusByRoleIdList) {
+                for (QfMenu menu1 : qfMenu) {
+                    if(menu.getId().equals(menu1.getId())) {
+                        return new AuthorizationDecision(true);
+                    }
                 }
             }
         }

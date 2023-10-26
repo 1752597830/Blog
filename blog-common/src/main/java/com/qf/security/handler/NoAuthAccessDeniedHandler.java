@@ -1,5 +1,6 @@
 package com.qf.security.handler;
 
+import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qf.domain.ResponseResult;
 import jakarta.servlet.ServletException;
@@ -26,9 +27,7 @@ public class NoAuthAccessDeniedHandler implements AccessDeniedHandler {
     @SneakyThrows
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)  {
-        log.info("认证未通过:{}",accessDeniedException.getMessage());
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(500);
-        response.getWriter().write(ResponseResult.errorJSON(accessDeniedException.getMessage()));
+        response.getWriter().write(JSON.toJSONString(ResponseResult.error(500, accessDeniedException.getMessage())));
     }
 }

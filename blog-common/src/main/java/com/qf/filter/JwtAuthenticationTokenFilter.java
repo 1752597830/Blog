@@ -36,17 +36,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 2、获取JWT
         String token = request.getHeader("Authorization");
         log.info("接收到的token:{}",token);
+        if( token == null ) {
+            response.setStatus(200);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(JSON.toJSONString(ResponseResult.error(400, "未登录无法访问！")));
+            return;
+        }
         if (token != null) {
             try {
                 JwtUtil.tokenVerify(token);
             }catch (Exception e){
                 response.setStatus(200);
                 response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write(JSON.toJSONString(new ResponseResult().setCode(400).setData(null).setMessage("非法token")));
+                response.getWriter().write(JSON.toJSONString(ResponseResult.error(400, "非法token")));
                 return;
             }
         }
-
         //放行，让后面的过滤器执行
         filterChain.doFilter(request, response);
     }

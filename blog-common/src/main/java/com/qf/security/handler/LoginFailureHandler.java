@@ -21,9 +21,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         String  result;
-        System.out.println(e);
         if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException || e instanceof AuthenticationServiceException) {
-            System.out.println("UsernameNotFoundException");
             result = e.getMessage();
         } else if (e instanceof LockedException) {
             result = "账户被锁定，请联系管理员!";
@@ -37,10 +35,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             //log.error("登录失败：", e);
             result = "登录失败!";
         }
-
-        response.setStatus(200);
         response.setContentType("application/json;charset=UTF-8");
-
-        response.getWriter().write(JSON.toJSONString(new ResponseResult().setCode(400).setData(null).setMessage(result)));
+        response.getWriter().write(JSON.toJSONString(ResponseResult.error(200, result)));
     }
 }

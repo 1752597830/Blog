@@ -27,5 +27,5 @@ public interface QfMenuMapper extends BaseMapper<QfMenu> {
 
     QfMenu selectByParentId(@Param("pid") Long pid);
 
-    QfMenu selectByroleId(@Param("roleId") int roleId);
+    List<QfMenu> selectByroleId(Integer roleId);
 }

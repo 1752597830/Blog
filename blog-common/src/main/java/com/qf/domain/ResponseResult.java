@@ -52,6 +52,10 @@ public class ResponseResult <T> {
         return new ResponseResult().setCode(ResultCode.ERROR.getCode()).setMessage(ResultCode.ERROR.getMsg()).setData(data);
     }
 
+    public static ResponseResult error(int code, String msg) {
+        return new ResponseResult().setCode(code).setMessage(msg);
+    }
+
     public static String errorJSON(String result) {
         return JSON.toJSONString(result);
     }

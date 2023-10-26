@@ -32,7 +32,10 @@
     </select>
 
     <select id="selectByroleId" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List" /> from qf_menu m, qf_role_menu rm where m.id = rm.menu_id and rm.role_id = #{roleId}
+        select m.id, m.name, m.icon, m.path, m.component, m.parent_id, m.order_num, m.del_status, m.create_time, m.update_time, m.create_by, m.update_by
+        from qf_menu m left join qf_role_menu rm
+            on m.id = rm.menu_id
+        where rm.role_id = #{roleId}
     </select>
 
     <select id="selectByParentId" resultMap="BaseResultMap">
