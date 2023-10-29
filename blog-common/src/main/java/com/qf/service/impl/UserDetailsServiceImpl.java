@@ -28,7 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new RuntimeException("账户不存在！");
         }
-
         // 2、将数据库中的角色拆分成SpringSecurity结构
         String roles = user.getRoles().stream().map(QfRole::getTag).collect(Collectors.joining(","));
         // 3、封装UserDetails返回

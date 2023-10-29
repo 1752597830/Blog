@@ -1,6 +1,5 @@
 package com.qf.security.auth;
 
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qf.common.Constant;
 import com.qf.domain.*;
@@ -8,7 +7,6 @@ import com.qf.mapper.QfMenuMapper;
 import com.qf.mapper.QfUserMapper;
 import com.qf.utils.qfTools;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -43,6 +41,8 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         if(!(authentication.get().getPrincipal() instanceof QfUser)){
             throw new AccessDeniedException("匿名不可访问!");
         }
+        // 后面可以将权限添加到redis中，直接去拿
+
         QfUser user = (QfUser) authentication.get().getPrincipal();
 
         user = userMapper.getByUsername(user.getUsername());
@@ -65,7 +65,7 @@ public class MyAuthorizationManager implements AuthorizationManager<RequestAutho
         }
         // 用路径来获取菜单
         List<QfMenu> menus = menuMapper.listMenu(queryWrapper);
-        // 遍历菜单判断权限
+        // 遍历菜单判断权限  后面优化代码
         for (QfMenu menu : menus) {
             for (List<QfMenu> qfMenu : menusByRoleIdList) {
                 for (QfMenu menu1 : qfMenu) {

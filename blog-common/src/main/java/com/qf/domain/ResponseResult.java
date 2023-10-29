@@ -32,28 +32,12 @@ public class ResponseResult <T> {
      */
     private T data;
 
-    /**
-     * 自定义返回成功数据
-     * @param data
-     * @return
-     * @param <T>
-     */
-    public static <T> ResponseResult success(T data) {
-        return new ResponseResult().setCode(ResultCode.SUCCESS.getCode()).setMessage(ResultCode.SUCCESS.getMsg()).setData(data);
-    }
-
-    /**
-     * 自定义返回失败数据
-     * @param data
-     * @return
-     * @param <T>
-     */
-    public static <T> ResponseResult error(T data) {
-        return new ResponseResult().setCode(ResultCode.ERROR.getCode()).setMessage(ResultCode.ERROR.getMsg()).setData(data);
-    }
-
     public static ResponseResult error(int code, String msg) {
         return new ResponseResult().setCode(code).setMessage(msg);
+    }
+
+    public static ResponseResult error(String msg) {
+        return new ResponseResult().setCode(ResultCode.ERROR.getCode()).setMessage(msg);
     }
 
     public static String errorJSON(String result) {
@@ -61,7 +45,7 @@ public class ResponseResult <T> {
     }
 
     public static <T> String successJSON(T data) {
-        return JSON.toJSONString(success(data));
+        return JSON.toJSONString(new ResponseResult().setCode(ResultCode.SUCCESS.getCode()).setMessage(ResultCode.SUCCESS.getMsg()).setData(data));
     }
 
     public static void main(String[] args) {
