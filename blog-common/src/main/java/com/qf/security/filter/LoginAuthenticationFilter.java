@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -35,7 +36,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                 authRequest = new UsernamePasswordAuthenticationToken("", "");
             } finally {
                 setDetails(request, authRequest);
-                this.getAuthenticationManager().authenticate(authRequest);
                 return this.getAuthenticationManager().authenticate(authRequest);
             }
         } else {

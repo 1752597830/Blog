@@ -28,6 +28,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 1、判断url是否匿名访问
         String requestURI = request.getRequestURI();
+        System.out.println(requestURI);
         //匿名地址直接访问
         if(qfTools.contains(requestURI, Constant.annos)){
             filterChain.doFilter(request, response);
@@ -52,6 +53,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
         }
+        //从redis中获取用户信息
+        //String redisKey = "login:" + userid;
+        //QfUser loginUser = redisCache.getCacheObject(redisKey);
+        //if(Objects.isNull(loginUser)){
+        //    throw new RuntimeException("用户未登录");
+        //}
         //放行，让后面的过滤器执行
         filterChain.doFilter(request, response);
     }

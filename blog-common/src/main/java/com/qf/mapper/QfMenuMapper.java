@@ -1,6 +1,7 @@
 package com.qf.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -26,6 +27,9 @@ public interface QfMenuMapper extends BaseMapper<QfMenu> {
     IPage<QfMenu> listPage(IPage<QfMenu> page, @Param(Constants.WRAPPER) Wrapper<QfMenu> queryWrapper);
 
     QfMenu selectByParentId(@Param("pid") Long pid);
+    List<QfMenu> listByuId(Integer uId);
 
-    List<QfMenu> selectByroleId(Integer roleId);
+    List<QfMenu> listByroleId(Integer roleId);
+
+    List<QfMenu> getRoutesById(Integer parentId, Integer rId);
 }

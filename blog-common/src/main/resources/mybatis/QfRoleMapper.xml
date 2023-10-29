@@ -20,4 +20,11 @@
         id, name, tag, remark, del_status, create_time, update_time, create_by, update_by
     </sql>
 
+    <select id="getSelectedRolesByMenuId"  resultMap="BaseResultMap">
+        SELECT r.*
+        FROM
+            qf_role r
+                LEFT JOIN qf_role_menu mr ON mr.role_id = r.id
+        WHERE mr.menu_id = #{menuId}
+    </select>
 </mapper>
