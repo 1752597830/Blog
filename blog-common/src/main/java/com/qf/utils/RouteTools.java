@@ -49,4 +49,9 @@ public class RouteTools {
         System.out.println(s);
         return s;
     }
+
+    public List<String> getPermissions(Integer id) {
+        List<String> list = qfMenuService.listPermissByuId(id);
+        return list;
+    }
 }

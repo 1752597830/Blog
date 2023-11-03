@@ -34,4 +34,9 @@ public class QfMenuServiceImpl implements QfMenuService {
     public List<QfMenu> getRoutesById(Integer parentId, Integer rId) {
         return qfMenuMapper.getRoutesById(parentId, rId);
     }
+
+    @Override
+    public List<String> listPermissByuId(Integer uId) {
+        return qfMenuMapper.listPermissByuId(uId);
+    }
 }

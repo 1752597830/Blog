@@ -12,4 +12,6 @@ public interface QfMenuService {
     List<QfMenu> listByuId(Integer uId);
 
     public List<QfMenu> getRoutesById(Integer parentId, Integer rId);
+
+    List<String> listPermissByuId(Integer uId);
 }

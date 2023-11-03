@@ -86,15 +86,19 @@ public class QfMenu implements Serializable {
     @JSONField(ordinal = 12)
     private LocalDateTime updateTime;
 
-    @ApiModelProperty("创建者")
+    @ApiModelProperty("备注")
     @JSONField(ordinal = 13)
+    private String remark;
+
+    @ApiModelProperty("创建者")
+    @JSONField(ordinal = 14)
     private String createBy;
 
     @ApiModelProperty("修改者")
-    @JSONField(ordinal = 14)
+    @JSONField(ordinal = 15)
     private String updateBy;
 
     @ApiModelProperty("孩子节点")
-    @JSONField(ordinal = 15)
+    @JSONField(ordinal = 16)
     private List<QfMenu> childMenu;
 }

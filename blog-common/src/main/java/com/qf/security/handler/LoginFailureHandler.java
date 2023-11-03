@@ -36,6 +36,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             result = "登录失败!";
         }
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(JSON.toJSONString(ResponseResult.error(200, result)));
+        response.getWriter().write(JSON.toJSONString(ResponseResult.error(401, result)));
     }
 }

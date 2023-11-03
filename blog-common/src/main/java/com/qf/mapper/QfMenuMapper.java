@@ -32,4 +32,6 @@ public interface QfMenuMapper extends BaseMapper<QfMenu> {
     List<QfMenu> listByroleId(Integer roleId);
 
     List<QfMenu> getRoutesById(Integer parentId, Integer rId);
+
+    List<String> listPermissByuId(Integer uId);
 }
