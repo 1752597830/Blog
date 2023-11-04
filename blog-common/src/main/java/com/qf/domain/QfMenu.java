@@ -100,5 +100,5 @@ public class QfMenu implements Serializable {
 
     @ApiModelProperty("孩子节点")
     @JSONField(ordinal = 16)
-    private List<QfMenu> childMenu;
+    private List<QfMenu> children;
 }

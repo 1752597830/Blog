@@ -39,7 +39,7 @@ public class RouteTools {
         //将这些非顶级节点的数据按pid进行分组
         Map<Integer, List<QfMenu>> sub = list.stream().collect(Collectors.groupingBy(QfMenu::getParentId));
         //循环设置对应的子节点（根据id = pid）
-        lisy.forEach(node -> node.setChildMenu(sub.get(node.getId())));
+        lisy.forEach(node -> node.setChildren(sub.get(node.getId())));
         //过滤掉父节点数据
         List<QfMenu> m = lisy.stream().filter(node -> node.getParentId() == 0L).collect(Collectors.toList());
         List<QfMenu> s = new ArrayList<>();
